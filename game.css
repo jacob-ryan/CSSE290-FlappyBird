@@ -1,0 +1,43 @@
+body
+{
+	background-color: black;
+	color: white;
+	font-family: "Segoe UI";
+	text-align: center;
+}
+
+.game-container
+{
+	background: url("http://excamera.com/sphinx/_images/scroll-screenshot.png");
+	border-radius: 10px;
+	border: 10px solid #333333;
+	margin: auto;
+	height: 600px;
+	width: 800px;
+}
+
+.title
+{
+	background-color: rgba(0, 0, 0, 0.5);
+	font-size: 40px;
+	padding-top: 15px;
+	padding-bottom: 20px;
+}
+
+.button
+{
+	background-color: #FFDDAA;
+	border-radius: 10px;
+	border: 1px solid #333333;
+	box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 10px;
+	cursor: pointer;
+	font-family: "Segoe UI";
+	padding: 10px;
+	margin: 15px;
+	width: 200px;
+}
+
+.button:hover
+{
+	background-color: #FFEECC;
+}
