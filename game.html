@@ -3,21 +3,23 @@
 <head>
 	<title>Flappy Bird</title>
 	<link href="game.css" type="text/css" rel="stylesheet" />
+	<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+	<script src="game.js"></script>
 </head>
 <body>
 	<h1>Flappy Bird</h1>
-	<h2>By blah</h2>
+	<h2>By Jacob Ryan, Matt Buckner, Peter Larson</h2>
 	<div class="game-container">
 		<div class="game-menu">
 			<h3 class="title">Flappy Bird</h3>
-			<button class="button">New Game</button>
+			<button class="button" id="new-game">New Game</button>
 			<br>
-			<button class="button">View Highscores</button>
+			<button class="button" id="view-highscores">View Highscores</button>
 			<br>
-			<button class="button">View Statistics</button>
+			<button class="button" id="view-statistics">View Statistics</button>
 		</div>
-		<div class="game-game">
-			<img src="Pipe.png">
+		<div class="game-game" style="display: none;">
+			<img src="bird.png" id="bird">
 		</div>
 	</div>
 </body>
