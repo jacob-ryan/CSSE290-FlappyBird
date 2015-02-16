@@ -50,3 +50,10 @@ body
 	left: -9999px;
 	top: 0px;
 }
+
+#bird
+{
+	position: absolute;
+	left: -9999px;
+	top: 0px;
+}

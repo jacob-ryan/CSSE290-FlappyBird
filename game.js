@@ -1,11 +1,35 @@
 $(document).ready(function()
 {
+	var playingGame = false;
 	var gameWidth = $(".game-container").width();
 	var gameHeight = $(".game-container").height();
 	var pipeTopUrl = "pipe-top.png";
 	var pipeBottomUrl = "pipe-bottom.png";
-	var separation = 100;
+	var separation = 200;
 	var pipes = [];
+	var bird = {
+		xPos: gameWidth / 2 - $("#bird").width() / 2,
+		yPos: gameHeight / 2,
+		velocity: 0,
+		getX: function()
+		{
+			return bird.xPos + $("#bird").width() / 2;
+		},
+		getY: function()
+		{
+			return bird.yPos + $("#bird").height() / 2;
+		},
+		move: function()
+		{
+			$("#bird").css("left", bird.xPos + "px");
+			$("#bird").css("top", bird.yPos + "px");
+			if (bird.yPos > gameHeight)
+			{
+				alert("You died");
+				playingGame = false;
+			}
+		}
+	};
 	
 	var addEventListeners = function()
 	{
@@ -18,8 +42,18 @@ $(document).ready(function()
 				pipes[0].setX(gameWidth);
 				pipes.push(createPipe());
 				pipes[1].setX(gameWidth * 1.5 + pipes[1].getWidth() / 2);
+				
+				playingGame = true;
 				window.requestAnimationFrame(render);
 			});
+		});
+		
+		$("body").on("keydown", function(e)
+		{
+			if (e.keyCode == 32)
+			{
+				bird.velocity = -8;
+			}
 		});
 	};
 	
@@ -30,14 +64,16 @@ $(document).ready(function()
 		
 		var top = $(".game-game .pipe.top").last();
 		var bottom = $(".game-game .pipe.bottom").last();
-		var yPos = getYPos();
-		var gap = 100;
-		top.css("top", yPos - top.height() - gap / 2);
-		bottom.css("top", yPos + gap / 2);
+		var gap = separation;
+		var yPos;
 		
 		var isCollision = function(x, y)
 		{
-			return false;
+			var x1 = getX();
+			var x2 = x1 + getWidth();
+			var y1 = yPos - gap / 2;
+			var y2 = yPos + gap / 2;
+			return x >= x1 && x <= x2 && (y <= y1 || y >= y2);
 		};
 		
 		var move = function()
@@ -45,11 +81,19 @@ $(document).ready(function()
 			if (getX() < -top.width())
 			{
 				setX(gameWidth);
+				resetY();
 			}
 			else
 			{
-				setX(getX() - 1);
+				setX(getX() - 2);
 			}
+		};
+		
+		var resetY = function()
+		{
+			yPos = getYPos();
+			top.css("top", (yPos - top.height() - gap / 2) + "px");
+			bottom.css("top", (yPos + gap / 2) + "px");
 		};
 		
 		var getX = function()
@@ -68,6 +112,8 @@ $(document).ready(function()
 			return top.width();
 		};
 		
+		resetY();
+		
 		return {
 			isCollision: isCollision,
 			move: move,
@@ -78,36 +124,39 @@ $(document).ready(function()
 	
 	var getYPos = function()
 	{
-		var top = 50;
-		var bottom = 200;
+		var top = 30;
+		var bottom = 150;
 		var range = gameHeight - top - bottom;
 		return Math.random() * range + top;
-	};
-	
-	var movePipe = function(pipe)
-	{
-		if (pipe.getX() < -pipe.getWidth())
-		{
-			pipe.setX(gameWidth);
-			pipe.set
-		}
-		else
-		{
-			pipe.setX(pipe.getX() - 3);
-		}
 	};
 	
 	var backgroundPos = 0;
 	var render = function()
 	{
-		backgroundPos -= 0.5;
+		backgroundPos -= 1;
 		$(".game-container").css("background-position", backgroundPos + "px 0px");
 		for (var i = 0; i < pipes.length; i += 1)
 		{
 			pipes[i].move();
 		}
 		
-		window.requestAnimationFrame(render);
+		bird.velocity += 0.25;
+		bird.yPos += bird.velocity;
+		bird.move();
+		for (var i = 0; i < pipes.length; i += 1)
+		{
+			var pipe = pipes[i];
+			if (pipe.isCollision(bird.getX(), bird.getY()))
+			{
+				alert("Smack!");
+				playingGame = false;
+			}
+		}
+		
+		if (playingGame)
+		{
+			window.requestAnimationFrame(render);
+		}
 	};
 	
 	addEventListeners();
