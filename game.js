@@ -5,11 +5,18 @@ $(document).ready(function()
 	var gameHeight = $(".game-container").height();
 	var pipeTopUrl = "pipe-top.png";
 	var pipeBottomUrl = "pipe-bottom.png";
-	var separation = 200;
+	var separation = 160;
 	var pipes = [];
 	var bird = {
-		xPos: gameWidth / 2 - $("#bird").width() / 2,
-		yPos: gameHeight / 2,
+		init: function()
+		{
+			bird.xPos = gameWidth / 2 - $("#bird").width() / 2;
+			bird.yPos = gameHeight / 2;
+			bird.velocity = 0;
+			bird.move();
+		},
+		xPos: 0,
+		yPos: 0,
 		velocity: 0,
 		getX: function()
 		{
@@ -25,10 +32,41 @@ $(document).ready(function()
 			$("#bird").css("top", bird.yPos + "px");
 			if (bird.yPos > gameHeight)
 			{
-				alert("You died");
-				playingGame = false;
+				endGame();
 			}
 		}
+	};
+	
+	var initGame = function()
+	{
+		$(".game-game").fadeIn(3000);
+		
+		$(".pipe").remove();
+		pipes = [];
+		bird.init();
+		
+		createPipe().done(function(pipe)
+		{
+			pipes.push(pipe);
+			pipe.setX(gameWidth);
+			
+			createPipe().done(function(pipe)
+			{
+				pipes.push(pipe);
+				pipe.setX(gameWidth * 1.5 + pipe.getWidth() / 2);
+				
+				playingGame = true;
+				window.requestAnimationFrame(render);
+			});
+		});
+	};
+	
+	var endGame = function()
+	{
+		alert("Game over!");
+		playingGame = false;
+		$(".game-game").hide();
+		$(".game-menu").fadeIn();
 	};
 	
 	var addEventListeners = function()
@@ -37,21 +75,7 @@ $(document).ready(function()
 		{
 			$(".game-menu").fadeOut(function()
 			{
-				$(".game-game").show();
-				createPipe().done(function(pipe)
-				{
-					pipes.push(pipe);
-					pipe.setX(gameWidth);
-					
-					createPipe().done(function(pipe)
-					{
-						pipes.push(pipe);
-						pipe.setX(gameWidth * 1.5 + pipe.getWidth() / 2);
-						
-						playingGame = true;
-						window.requestAnimationFrame(render);
-					});
-				});
+				initGame();
 			});
 		});
 		
@@ -161,13 +185,15 @@ $(document).ready(function()
 		bird.velocity += 0.25;
 		bird.yPos += bird.velocity;
 		bird.move();
+		var deg = Math.atan(bird.velocity / 8.0) * 180 / Math.PI;
+		$("#bird").css("transform", "rotate(" + deg + "deg)");
 		for (var i = 0; i < pipes.length; i += 1)
 		{
 			var pipe = pipes[i];
-			if (pipe.isCollision(bird.getX(), bird.getY()))
+			if (pipe.isCollision(bird.getX(), bird.getY() - 5) || pipe.isCollision(bird.getX(), bird.getY() + 5))
 			{
-				alert("Smack!");
-				playingGame = false;
+				endGame();
+				break;
 			}
 		}
 		
