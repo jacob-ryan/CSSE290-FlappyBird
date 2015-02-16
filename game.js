@@ -38,13 +38,20 @@ $(document).ready(function()
 			$(".game-menu").fadeOut(function()
 			{
 				$(".game-game").show();
-				pipes.push(createPipe());
-				pipes[0].setX(gameWidth);
-				pipes.push(createPipe());
-				pipes[1].setX(gameWidth * 1.5 + pipes[1].getWidth() / 2);
-				
-				playingGame = true;
-				window.requestAnimationFrame(render);
+				createPipe().done(function(pipe)
+				{
+					pipes.push(pipe);
+					pipe.setX(gameWidth);
+					
+					createPipe().done(function(pipe)
+					{
+						pipes.push(pipe);
+						pipe.setX(gameWidth * 1.5 + pipe.getWidth() / 2);
+						
+						playingGame = true;
+						window.requestAnimationFrame(render);
+					});
+				});
 			});
 		});
 		
@@ -59,6 +66,8 @@ $(document).ready(function()
 	
 	var createPipe = function()
 	{
+		var defer = $.Deferred();
+		
 		$(".game-game").append("<img class='pipe top' src='" + pipeTopUrl + "'>");
 		$(".game-game").append("<img class='pipe bottom' src='" + pipeBottomUrl + "'>");
 		
@@ -66,6 +75,22 @@ $(document).ready(function()
 		var bottom = $(".game-game .pipe.bottom").last();
 		var gap = separation;
 		var yPos;
+		
+		var loadCount = 0;
+		top.add(bottom).on("load", function()
+		{
+			loadCount += 1;
+			if (loadCount == 2)
+			{
+				resetY();
+				defer.resolve({
+					isCollision: isCollision,
+					move: move,
+					setX: setX,
+					getWidth: getWidth
+				});
+			}
+		});
 		
 		var isCollision = function(x, y)
 		{
@@ -112,20 +137,13 @@ $(document).ready(function()
 			return top.width();
 		};
 		
-		resetY();
-		
-		return {
-			isCollision: isCollision,
-			move: move,
-			setX: setX,
-			getWidth: getWidth
-		};
+		return defer.promise();
 	};
 	
 	var getYPos = function()
 	{
-		var top = 30;
-		var bottom = 150;
+		var top = 100;
+		var bottom = 100;
 		var range = gameHeight - top - bottom;
 		return Math.random() * range + top;
 	};
