@@ -44,6 +44,15 @@ body
 	background-color: #FFEECC;
 }
 
+.game-stats
+{
+	background-color: rgba(0, 0, 0, 0.5);
+	display: inline-block;
+	padding: 20px;
+	position: relative;
+	z-index: 100;
+}
+
 .pipe
 {
 	position: absolute;

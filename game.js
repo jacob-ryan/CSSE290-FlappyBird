@@ -39,11 +39,16 @@ $(document).ready(function()
 	
 	var initGame = function()
 	{
-		$(".game-game").fadeIn(3000);
+		$(".game-game").show();
 		
 		$(".pipe").remove();
 		pipes = [];
 		bird.init();
+		
+		$("#game-stats-score").text("0");
+		$("#game-stats-taps").text("0");
+		var games = parseInt($("#game-stats-games").text());
+		$("#game-stats-games").text(games + 1);
 		
 		createPipe().done(function(pipe)
 		{
@@ -84,6 +89,9 @@ $(document).ready(function()
 			if (e.keyCode == 32)
 			{
 				bird.velocity = -8;
+				
+				var taps = parseInt($("#game-stats-taps").text());
+				$("#game-stats-taps").text(taps + 1);
 			}
 		});
 	};
@@ -134,7 +142,15 @@ $(document).ready(function()
 			}
 			else
 			{
-				setX(getX() - 2);
+				var oldX = getX();
+				setX(oldX - 2);
+				
+				var cutoff = gameWidth / 2 - getWidth();
+				if (oldX >= cutoff && getX() < cutoff)
+				{
+					var score = parseInt($("#game-stats-score").text());
+					$("#game-stats-score").text(score + 1);
+				}
 			}
 		};
 		
