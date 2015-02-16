@@ -68,10 +68,10 @@ $(document).ready(function()
 	
 	var endGame = function()
 	{
-		alert("Game over!");
 		playingGame = false;
+		alert("You died!");
 		$(".game-game").hide();
-		$(".game-menu").fadeIn();
+		$(".game-submit").show();
 	};
 	
 	var addEventListeners = function()
@@ -84,6 +84,12 @@ $(document).ready(function()
 			});
 		});
 		
+		$("#game-submit-no").on("click", function()
+		{
+			$(".game-submit").hide();
+			$(".game-menu").fadeIn();
+		});
+		
 		$("body").on("keydown", function(e)
 		{
 			if (e.keyCode == 32)
@@ -92,6 +98,8 @@ $(document).ready(function()
 				
 				var taps = parseInt($("#game-stats-taps").text());
 				$("#game-stats-taps").text(taps + 1);
+				
+				(new Audio("flap.wav")).play();
 			}
 		});
 	};
@@ -206,7 +214,7 @@ $(document).ready(function()
 		for (var i = 0; i < pipes.length; i += 1)
 		{
 			var pipe = pipes[i];
-			if (pipe.isCollision(bird.getX(), bird.getY() - 5) || pipe.isCollision(bird.getX(), bird.getY() + 5))
+			if (pipe.isCollision(bird.getX(), bird.getY() - 15) || pipe.isCollision(bird.getX(), bird.getY() + 15))
 			{
 				endGame();
 				break;
