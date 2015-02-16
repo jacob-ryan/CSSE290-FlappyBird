@@ -8,7 +8,7 @@ body
 
 .game-container
 {
-	background: url("http://excamera.com/sphinx/_images/scroll-screenshot.png");
+	background: url("background-simple.png");
 	border-radius: 10px;
 	border: 10px solid #333333;
 	margin: auto;
