@@ -5,7 +5,7 @@ $(document).ready(function()
 	var gameHeight = $(".game-container").height();
 	var pipeTopUrl = "pipe-top.png";
 	var pipeBottomUrl = "pipe-bottom.png";
-	var separation = 160;
+	var separation = 180;
 	var pipes = [];
 	var bird = {
 		init: function()
@@ -84,10 +84,57 @@ $(document).ready(function()
 			});
 		});
 		
+		$("#view-highscores").on("click", function()
+		{
+			$(".game-menu").fadeOut(function()
+			{
+				$(".highscores-table").html("<tr>\
+					<th>Rank:</th>\
+					<th>Name:</th>\
+					<th>Score:</th>\
+					<th>Taps:</th>\
+					<th>Games:</th>\
+				</tr>");
+				$.get("highscores.php").done(function(data)
+				{
+					var scores = data.split("\n");
+					for (var i = 0; i < scores.length; i += 1)
+					{
+						var score = scores[i].trim().split(";");
+						var html = "<tr>";
+						html += "<td>" + (i + 1) + "</td>";
+						html += "<td>" + score[0] + "</td>";
+						html += "<td>" + score[1] + "</td>";
+						html += "<td>" + score[2] + "</td>";
+						html += "<td>" + score[3] + "</td>";
+						html += "</tr>";
+						$(".highscores-table").append(html);
+					}
+				});
+				$(".game-highscores").fadeIn();
+			});
+		});
+		
 		$("#game-submit-no").on("click", function()
 		{
 			$(".game-submit").hide();
 			$(".game-menu").fadeIn();
+		});
+		
+		$("#game-submit-yes").on("click", function()
+		{
+			$("#game-submit-yes").attr("disabled", "disabled");
+			var name = $("#game-submit-name").val();
+			var score = parseInt($("#game-stats-score").text());
+			var taps = parseInt($("#game-stats-taps").text());
+			var games = parseInt($("#game-stats-games").text());
+			$.post("submit-score.php?name=" + name + "&score=" + score + "&taps=" + taps + "&games=" + games).done(function()
+			{
+				$("#game-submit-yes").removeAttr("disabled");
+			}).fail(function(error)
+			{
+				alert(JSON.stringify(error));
+			});
 		});
 		
 		$("body").on("keydown", function(e)
