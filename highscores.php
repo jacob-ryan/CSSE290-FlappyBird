@@ -6,7 +6,7 @@
 	
 	foreach ($rows as $row)
 	{
-		print($row["name"] . ";" . $row["score"] . ";" . $row["taps"] . ";" . $row["games"]);
+		print($row["name"] . ";" . $row["score"] . ";" . $row["taps"] . ";" . $row["games"] . ";" . $row["timeSubmitted"]);
 		print("\n");
 	}
 ?>

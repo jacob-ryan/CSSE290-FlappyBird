@@ -72,6 +72,7 @@ $(document).ready(function()
 		alert("You died!");
 		$(".game-game").hide();
 		$(".game-submit").show();
+		$("#game-submit-yes").removeAttr("disabled");
 	};
 	
 	var addEventListeners = function()
@@ -94,6 +95,7 @@ $(document).ready(function()
 					<th>Score:</th>\
 					<th>Taps:</th>\
 					<th>Games:</th>\
+					<th>Date/Time:</th>\
 				</tr>");
 				$.get("highscores.php").done(function(data)
 				{
@@ -107,11 +109,20 @@ $(document).ready(function()
 						html += "<td>" + score[1] + "</td>";
 						html += "<td>" + score[2] + "</td>";
 						html += "<td>" + score[3] + "</td>";
+						html += "<td>" + score[4] + "</td>";
 						html += "</tr>";
 						$(".highscores-table").append(html);
 					}
 				});
 				$(".game-highscores").fadeIn();
+			});
+		});
+		
+		$("#game-highscores-mainMenu").on("click", function()
+		{
+			$(".game-highscores").fadeOut(function()
+			{
+				$(".game-menu").fadeIn();
 			});
 		});
 		
@@ -130,7 +141,9 @@ $(document).ready(function()
 			var games = parseInt($("#game-stats-games").text());
 			$.post("submit-score.php?name=" + name + "&score=" + score + "&taps=" + taps + "&games=" + games).done(function()
 			{
-				$("#game-submit-yes").removeAttr("disabled");
+				alert("Your score was submitted.");
+				$(".game-submit").hide();
+				$(".game-menu").fadeIn();
 			}).fail(function(error)
 			{
 				alert(JSON.stringify(error));
