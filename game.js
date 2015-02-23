@@ -97,7 +97,7 @@ $(document).ready(function()
 				</tr>");
 				$.get("highscores.php").done(function(data)
 				{
-					var scores = data.split("\n");
+					var scores = data.trim().split("\n");
 					for (var i = 0; i < scores.length; i += 1)
 					{
 						var score = scores[i].trim().split(";");

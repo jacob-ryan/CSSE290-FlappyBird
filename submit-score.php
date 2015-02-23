@@ -1,14 +1,15 @@
 <?php
 	include("common.php");
 	
-	if (isset($_POST["name"]) && isset($_POST["score"]) && isset($_POST["taps"]) && isset($_POST["games"]))
+	if (isset($_GET["name"]) && isset($_GET["score"]) && isset($_GET["taps"]) && isset($_GET["games"]))
 	{
-		$name = $db->quote($_POST["name"]);
-		$score = $db->quote($_POST["score"]);
-		$taps = $db->quote($_POST["taps"]);
-		$game = $db->quote($_POST["games"]);
+		$name = $db->quote($_GET["name"]);
+		$score = $db->quote($_GET["score"]);
+		$taps = $db->quote($_GET["taps"]);
+		$games = $db->quote($_GET["games"]);
 		
-		$db->query("INSERT INTO Highscores VALUES(" + name + ", " + score + ", " + taps + ", " + games + ", UTC_TIMESTAMP());");
+		$sql = "INSERT INTO Highscores VALUES(" . $name . ", " . $score . ", " . $taps . ", " . $games . ", UTC_TIMESTAMP());";
+		$db->query($sql);
 		
 		print("success");
 	}
