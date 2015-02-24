@@ -35,15 +35,19 @@
 	$sql = "SELECT score FROM Highscores WHERE score > 0 ORDER BY score DESC;";
 	$rows = $db->query($sql);
 	$i = 0;
-	foreach ($rows as $row)
-	{
-		if ($i == floor($rows->rowCount() / 2))
+	if($rows->rowCount() != 0 ) {
+		foreach ($rows as $row)
 		{
-			$median = $row["score"];
+			if ($i == floor($rows->rowCount() / 2))
+			{
+				$median = $row["score"];
+			}
+			$i += 1;
 		}
-		$i += 1;
-	}
-	print($median);
+		print($median);
+	} else {
+		print "0";
+		}
 ?>
 			</td>
 		</tr>
