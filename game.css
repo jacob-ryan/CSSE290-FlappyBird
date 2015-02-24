@@ -93,11 +93,53 @@ body
 
 .text-shadow
 {
-	text-shadow: 1px 1px 5px rgba(0, 0, 0, 1.0);
+	text-shadow: 1px 1px 4px rgba(0, 0, 0, 1.0);
 }
 
 .highscores-table
 {
 	background-color: rgba(0, 0, 0, 0.5);
 	width: 100%;
+}
+
+.statistics-table
+{
+	margin: 20px;
+}
+
+.statistics-table th
+{
+	padding: 3px;
+	padding-right: 10px;
+	text-align: right;
+}
+
+.statistics-table td
+{
+	text-align: left;
+}
+
+.distribution-graph
+{
+	border: 1px solid #333333;
+	border-collapse: collapse;
+	margin: 20px auto 40px auto;
+	width: 90%;
+}
+
+.distribution-graph th, .distribution-graph td
+{
+	border: 1px solid #333333;
+	width: 9999px;
+}
+
+.distribution-graph td
+{
+	height: 300px;
+	vertical-align: bottom;
+}
+
+.distribution-graph td > div
+{
+	background: linear-gradient(to right, #FF9999, #FF6666);
 }
