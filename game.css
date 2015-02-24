@@ -6,18 +6,6 @@ body
 	text-align: center;
 }
 
-.game-container
-{
-	background: url("background-simple.png");
-	border-radius: 10px;
-	border: 10px solid #333333;
-	margin: auto;
-	height: 600px;
-	width: 800px;
-	overflow: hidden;
-	position: relative;
-}
-
 .title
 {
 	background-color: rgba(0, 0, 0, 0.5);
@@ -44,6 +32,30 @@ body
 	background-color: #FFEECC;
 }
 
+.game-container
+{
+	background: url("background-simple.png");
+	border-radius: 10px;
+	border: 10px solid #333333;
+	height: 600px;
+	margin: auto;
+	width: 800px;
+}
+
+.game-container > div
+{
+	height: 600px;
+	width: 800px;
+}
+
+.game-game
+{
+	display: none;
+	overflow: hidden;
+	position: relative;
+	text-align: left;
+}
+
 .game-stats
 {
 	background-color: rgba(0, 0, 0, 0.5);
@@ -51,6 +63,18 @@ body
 	padding: 20px;
 	position: relative;
 	z-index: 100;
+}
+
+.game-highscores
+{
+	display: none;
+	overflow: auto;
+}
+
+.game-statistics
+{
+	display: none;
+	overflow: auto;
 }
 
 .pipe
@@ -67,9 +91,9 @@ body
 	top: 0px;
 }
 
-.submit-container
+.text-shadow
 {
-	text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.75);
+	text-shadow: 1px 1px 5px rgba(0, 0, 0, 1.0);
 }
 
 .highscores-table

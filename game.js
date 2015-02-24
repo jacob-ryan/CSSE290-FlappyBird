@@ -118,6 +118,18 @@ $(document).ready(function()
 			});
 		});
 		
+		$("#view-statistics").on("click", function()
+		{
+			$(".game-menu").fadeOut(function()
+			{
+				$(".game-statistics").fadeIn();
+				$.get("statistics.php").done(function(data)
+				{
+					$("#game-statistics-output").html(data);
+				});
+			});
+		});
+		
 		$("#game-highscores-mainMenu").on("click", function()
 		{
 			$(".game-highscores").fadeOut(function()
@@ -126,28 +138,45 @@ $(document).ready(function()
 			});
 		});
 		
+		$("#game-statistics-mainMenu").on("click", function()
+		{
+			$(".game-statistics").fadeOut(function()
+			{
+				$(".game-menu").fadeIn();
+			});
+		});
+		
 		$("#game-submit-no").on("click", function()
 		{
-			$(".game-submit").hide();
-			$(".game-menu").fadeIn();
+			$(".game-submit").fadeOut(function()
+			{
+				$(".game-menu").fadeIn();
+			});
 		});
 		
 		$("#game-submit-yes").on("click", function()
 		{
-			$("#game-submit-yes").attr("disabled", "disabled");
-			var name = $("#game-submit-name").val();
+			var name = $("#game-submit-name").val().trim();
 			var score = parseInt($("#game-stats-score").text());
 			var taps = parseInt($("#game-stats-taps").text());
 			var games = parseInt($("#game-stats-games").text());
-			$.post("submit-score.php?name=" + name + "&score=" + score + "&taps=" + taps + "&games=" + games).done(function()
+			
+			if (name.length >= 3 && name.length <= 32)
 			{
-				alert("Your score was submitted.");
-				$(".game-submit").hide();
-				$(".game-menu").fadeIn();
-			}).fail(function(error)
+				$("#game-submit-yes").attr("disabled", "disabled");
+				$.post("submit-score.php?name=" + name + "&score=" + score + "&taps=" + taps + "&games=" + games).done(function()
+				{
+					alert("Your score was submitted.");
+					$("#game-submit-no").click();
+				}).fail(function(error)
+				{
+					alert(JSON.stringify(error));
+				});
+			}
+			else
 			{
-				alert(JSON.stringify(error));
-			});
+				alert("Please enter a valid name\nthat is 3 to 32 characters long.");
+			}
 		});
 		
 		$("body").on("keydown", function(e)

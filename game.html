@@ -19,7 +19,7 @@
 			<br>
 			<button class="button" id="view-statistics">View Statistics</button>
 		</div>
-		<div class="game-game" style="display: none; text-align: left;">
+		<div class="game-game">
 			<div class="game-stats">
 				Score: <span id="game-stats-score">...</span>
 				<br>
@@ -31,10 +31,10 @@
 		</div>
 		<div class="game-submit" style="display: none;">
 			<h3 class="title">Game Over</h3>
-			<div class="submit-container">
+			<div class="text-shadow">
 				Would you like to submit your score?
 				<br>
-				If so, please enter your name below
+				If so, please enter your name below.
 				<br>
 				<br>
 				<input type="text" style="padding: 8px;" id="game-submit-name">
@@ -44,11 +44,17 @@
 			<button class="button" id="game-submit-yes">Yes</button>
 			<button class="button" id="game-submit-no">No</button>
 		</div>
-		<div class="game-highscores" style="display: none; overflow: auto;">
+		<div class="game-highscores">
 			<h3 class="title">Highscores</h3>
 			<button class="button" id="game-highscores-mainMenu">Main Menu</button>
 			<table class="highscores-table">
 			</table>
+		</div>
+		<div class="game-statistics">
+			<h3 class="title">Statistics</h3>
+			<button class="button" id="game-statistics-mainMenu">Main Menu</button>
+			<div class="text-shadow" id="game-statistics-output">
+			</div>
 		</div>
 	</div>
 </body>
