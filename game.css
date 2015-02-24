@@ -77,6 +77,13 @@ body
 	overflow: auto;
 }
 
+.game-options
+{
+	display: none;
+	overflow: auto;
+}
+
+
 .pipe
 {
 	position: absolute;

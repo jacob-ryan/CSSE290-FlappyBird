@@ -6,7 +6,9 @@ $(document).ready(function()
 	var pipeTopUrl = "pipe-top.png";
 	var pipeBottomUrl = "pipe-bottom.png";
 	var separation = 180;
+	var flapTime = 50;
 	var pipes = [];
+	var birdImg = document.getElementById("bird");
 	var bird = {
 		init: function()
 		{
@@ -130,6 +132,34 @@ $(document).ready(function()
 			});
 		});
 		
+		$("#view-options").on("click", function()
+		{
+			$(".game-menu").fadeOut(function()
+			{
+				$(".game-options").fadeIn();
+			});
+		});
+		
+		$("#game-options-defaultBird").on("click", function()
+		{
+			birdImg.src = "bird_1.png";
+		});
+		
+		$("#game-options-miniBird").on("click", function()
+		{
+			birdImg.src = "minibird_1.png";
+		});
+		
+		$("#game-options-defaultBackground").on("click", function()
+		{
+			$(".game-container").css("background", "url(background-simple.png)");
+		});
+		
+		$("#game-options-metroidBackground").on("click", function()
+		{
+			$(".game-container").css("background", "url(background-metroid.png)");
+		});
+		
 		$("#game-highscores-mainMenu").on("click", function()
 		{
 			$(".game-highscores").fadeOut(function()
@@ -141,6 +171,14 @@ $(document).ready(function()
 		$("#game-statistics-mainMenu").on("click", function()
 		{
 			$(".game-statistics").fadeOut(function()
+			{
+				$(".game-menu").fadeIn();
+			});
+		});
+		
+		$("#game-options-mainMenu").on("click", function()
+		{
+			$(".game-options").fadeOut(function()
 			{
 				$(".game-menu").fadeIn();
 			});
@@ -184,10 +222,16 @@ $(document).ready(function()
 			if (e.keyCode == 32)
 			{
 				bird.velocity = -8;
-				
+												
 				var taps = parseInt($("#game-stats-taps").text());
 				$("#game-stats-taps").text(taps + 1);
 				
+				birdImg.src = birdImg.src.replace("_1", "_2");
+				setTimeout(function() {birdImg.src = birdImg.src.replace("_2", "_3"); setTimeout(
+					function() {birdImg.src = birdImg.src.replace("_3", "_1");}, flapTime) }, flapTime);
+				
+				
+								
 				(new Audio("flap.wav")).play();
 			}
 		});
