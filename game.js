@@ -6,12 +6,12 @@ $(document).ready(function()
 	var pipeTopUrl = "pipe-top.png";
 	var pipeBottomUrl = "pipe-bottom.png";
 	var separation = 180;
-	var flapTime = 50;
+	var flapTime = 100;
 	var pipes = [];
-	var birdImg = document.getElementById("bird");
 	var gameMode;
 	var crosshair;
 	var bird = {
+		element: $("#bird")[0],
 		init: function()
 		{
 			bird.xPos = gameWidth / 2 - $("#bird").width() / 2;
@@ -40,51 +40,53 @@ $(document).ready(function()
 			}
 		}
 	};
-	
+
 	var initGame = function()
 	{
 		$(".game-game").show();
-		
+
 		$(".pipe").remove();
 		pipes = [];
 		bird.init();
-		
+
 		$("#game-stats-score").text("0");
 		$("#game-stats-taps").text("0");
 		var games = parseInt($("#game-stats-games").text());
 		$("#game-stats-games").text(games + 1);
-		
+
 		createPipe().done(function(pipe)
 		{
 			pipes.push(pipe);
 			pipe.setX(gameWidth);
-			
+
 			createPipe().done(function(pipe)
 			{
 				pipes.push(pipe);
 				pipe.setX(gameWidth * 1.5 + pipe.getWidth() / 2);
-				
+
 				playingGame = true;
 				window.requestAnimationFrame(render);
 			});
 		});
 	};
-	
+
 	var endGame = function()
 	{
-	    playingGame = false;
-	    if (gameMode == "upsideDown") {
-	        $(".game-container").removeClass("upside-down");
-	    }
-	    if (gameMode == "fps") {
-	        endGameModefps();
-	    }
 		alert("You died!");
+		playingGame = false;
+		if (gameMode == "upsideDown")
+		{
+			$(".game-container").removeClass("upside-down");
+		}
+		if (gameMode == "fps")
+		{
+			endGameModefps();
+		}
 		$(".game-game").hide();
 		$(".game-submit").show();
 		$("#game-submit-yes").removeAttr("disabled");
 	};
-	
+
 	var addEventListeners = function()
 	{
 		$("#new-game").on("click", function()
@@ -94,7 +96,7 @@ $(document).ready(function()
 				gameModeClassic();
 			});
 		});
-		
+
 		$("#view-highscores").on("click", function()
 		{
 			$(".game-menu").fadeOut(function()
@@ -110,7 +112,8 @@ $(document).ready(function()
 				$.get("highscores.php").done(function(data)
 				{
 					var scores = data.trim().split("\n");
-					if(scores != "") {
+					if (scores != "")
+					{
 						for (var i = 0; i < scores.length; i += 1)
 						{
 							var score = scores[i].trim().split(";");
@@ -124,14 +127,15 @@ $(document).ready(function()
 							html += "</tr>";
 							$(".highscores-table").append(html);
 						}
-					} else {
-						
+					} else
+					{
+
 					}
 				});
 				$(".game-highscores").fadeIn();
 			});
 		});
-		
+
 		$("#view-statistics").on("click", function()
 		{
 			$(".game-menu").fadeOut(function()
@@ -143,6 +147,7 @@ $(document).ready(function()
 				});
 			});
 		});
+
 		$("#other-game-modes").on("click", function()
 		{
 			$(".game-menu").fadeOut(function()
@@ -150,7 +155,7 @@ $(document).ready(function()
 				$(".game-modes").fadeIn();
 			});
 		});
-		
+
 		$("#game-modes-mainMenu").on("click", function()
 		{
 			$(".game-modes").fadeOut(function()
@@ -158,36 +163,35 @@ $(document).ready(function()
 				$(".game-menu").fadeIn();
 			});
 		});
-		
-		$("#game-modes-upsideDown").on("click", function () {
-		    
 
-		    $(".game-modes").fadeOut(function () {
-
-		        gameModeUpsideDown();
-
-		    });
+		$("#game-modes-upsideDown").on("click", function()
+		{
+			$(".game-modes").fadeOut(function()
+			{
+				gameModeUpsideDown();
+			});
 		});
 
-		$("#game-modes-hard").on("click", function () {
-
-
-		    $(".game-modes").fadeOut(function () {
-
-		        gameModeHard();
-
-		    });
+		$("#game-modes-hard").on("click", function()
+		{
+			$(".game-modes").fadeOut(function()
+			{
+				gameModeHard();
+			});
 		});
-		$("#game-modes-fps").on("click", function () {
+
+		$("#game-modes-fps").on("click", function()
+		{
 
 
-		    $(".game-modes").fadeOut(function () {
+			$(".game-modes").fadeOut(function()
+			{
 
-		        gameModeFps();
+				gameModeFps();
 
-		    });
+			});
 		});
-		
+
 		$("#view-options").on("click", function()
 		{
 			$(".game-menu").fadeOut(function()
@@ -195,27 +199,27 @@ $(document).ready(function()
 				$(".game-options").fadeIn();
 			});
 		});
-		
+
 		$("#game-options-defaultBird").on("click", function()
 		{
-			birdImg.src = "bird_1.png";
+			bird.element.src = "bird_1.png";
 		});
-		
+
 		$("#game-options-miniBird").on("click", function()
 		{
-			birdImg.src = "minibird_1.png";
+			bird.element.src = "minibird_1.png";
 		});
-		
+
 		$("#game-options-defaultBackground").on("click", function()
 		{
 			$(".game-container").css("background", "url(background-simple.png)");
 		});
-		
+
 		$("#game-options-metroidBackground").on("click", function()
 		{
 			$(".game-container").css("background", "url(background-metroid.png)");
 		});
-		
+
 		$("#game-highscores-mainMenu").on("click", function()
 		{
 			$(".game-highscores").fadeOut(function()
@@ -223,7 +227,7 @@ $(document).ready(function()
 				$(".game-menu").fadeIn();
 			});
 		});
-		
+
 		$("#game-statistics-mainMenu").on("click", function()
 		{
 			$(".game-statistics").fadeOut(function()
@@ -231,7 +235,7 @@ $(document).ready(function()
 				$(".game-menu").fadeIn();
 			});
 		});
-		
+
 		$("#game-options-mainMenu").on("click", function()
 		{
 			$(".game-options").fadeOut(function()
@@ -239,7 +243,7 @@ $(document).ready(function()
 				$(".game-menu").fadeIn();
 			});
 		});
-		
+
 		$("#game-submit-no").on("click", function()
 		{
 			$(".game-submit").fadeOut(function()
@@ -247,14 +251,14 @@ $(document).ready(function()
 				$(".game-menu").fadeIn();
 			});
 		});
-		
+
 		$("#game-submit-yes").on("click", function()
 		{
 			var name = $("#game-submit-name").val().trim();
 			var score = parseInt($("#game-stats-score").text());
 			var taps = parseInt($("#game-stats-taps").text());
 			var games = parseInt($("#game-stats-games").text());
-			
+
 			if (name.length >= 3 && name.length <= 32)
 			{
 				$("#game-submit-yes").attr("disabled", "disabled");
@@ -273,45 +277,53 @@ $(document).ready(function()
 			}
 
 		});
-		
+
 		$("body").on("keydown", function(e)
 		{
-		    if (e.keyCode == 32)
-		    {
-		        if (gameMode == "hard")
-		        {
-		                bird.velocity = -7.5;
-		        }
-		        else
-		        {
-		            bird.velocity = -8;
-		        }						
+			if (e.keyCode == 32)
+			{
+				if (gameMode == "hard")
+				{
+					bird.velocity = -7.5;
+				}
+				else
+				{
+					bird.velocity = -8;
+				}
 				var taps = parseInt($("#game-stats-taps").text());
 				$("#game-stats-taps").text(taps + 1);
 				
-				birdImg.src = birdImg.src.replace("_1", "_2");
-				setTimeout(function() {birdImg.src = birdImg.src.replace("_2", "_3"); setTimeout(
-					function() {birdImg.src = birdImg.src.replace("_3", "_1");}, flapTime) }, flapTime);
+				bird.element.src = bird.element.src.replace("_1", "_2");
+				setTimeout(function()
+				{
+					bird.element.src = bird.element.src.replace("_2", "_3");
+					setTimeout(function()
+					{
+						bird.element.src = bird.element.src.replace("_3", "_2");
+						setTimeout(function()
+						{
+							bird.element.src = bird.element.src.replace("_2", "_1");
+						}, flapTime);
+					}, flapTime);
+				}, flapTime);
 				
-				
-								
 				(new Audio("flap.wav")).play();
 			}
 		});
 	};
-	
+
 	var createPipe = function()
 	{
 		var defer = $.Deferred();
-		
+
 		$(".game-game").append("<img class='pipe top' src='" + pipeTopUrl + "'>");
 		$(".game-game").append("<img class='pipe bottom' src='" + pipeBottomUrl + "'>");
-		
+
 		var top = $(".game-game .pipe.top").last();
 		var bottom = $(".game-game .pipe.bottom").last();
 		var gap = separation;
 		var yPos;
-		
+
 		var loadCount = 0;
 		top.add(bottom).on("load", function()
 		{
@@ -324,27 +336,31 @@ $(document).ready(function()
 					move: move,
 					setX: setX,
 					getWidth: getWidth,
-                    shootPipe: shootPipe
+					shootPipe: shootPipe
 				});
 			}
 		});
 
-		var shootPipe = function (x, y) {
-		    var x1 = getX();
-		    var x2 = x1 + getWidth();
-		    var y1 = yPos - gap / 2;
-		    var y2 = yPos + gap / 2;
-		    if (x >= x1 && x <= x2) {
-		        if (y <= y1 && top.is(":visible")) {
-		            top.hide();
-		            return true;
-		        }
-		        else if (y >= y2 && bottom.is(":visible")) {
-		            bottom.hide();
-		            return true;
-		        }
-		    }
-		    return false;
+		var shootPipe = function(x, y)
+		{
+			var x1 = getX();
+			var x2 = x1 + getWidth();
+			var y1 = yPos - gap / 2;
+			var y2 = yPos + gap / 2;
+			if (x >= x1 && x <= x2)
+			{
+				if (y <= y1 && top.is(":visible"))
+				{
+					top.hide();
+					return true;
+				}
+				else if (y >= y2 && bottom.is(":visible"))
+				{
+					bottom.hide();
+					return true;
+				}
+			}
+			return false;
 		};
 
 		var isCollision = function(x, y)
@@ -353,32 +369,33 @@ $(document).ready(function()
 			var x2 = x1 + getWidth();
 			var y1 = yPos - gap / 2;
 			var y2 = yPos + gap / 2;
-			if (x >= x1 && x <= x2) {
-			    if(y <= y1 && top.is(":visible"))
-                    return true;
-			    else if(y >= y2 && bottom.is(":visible"))
-			        return true;
+			if (x >= x1 && x <= x2)
+			{
+				if (y <= y1 && top.is(":visible"))
+					return true;
+				else if (y >= y2 && bottom.is(":visible"))
+					return true;
 			}
 			return false;
 		};
-		
+
 		var move = function()
 		{
 			if (getX() < -top.width())
 			{
-			    top.show();
-			    bottom.show();
+				top.show();
+				bottom.show();
 				setX(gameWidth);
 				resetY();
 			}
 			else
 			{
-			    var oldX = getX();
-			    if (gameMode == "hard")
-			        setX(oldX - 6);
-			    else
-				    setX(oldX - 2);
-				
+				var oldX = getX();
+				if (gameMode == "hard")
+					setX(oldX - 6);
+				else
+					setX(oldX - 2);
+
 				var cutoff = gameWidth / 2 - getWidth();
 				if (oldX >= cutoff && getX() < cutoff)
 				{
@@ -387,7 +404,7 @@ $(document).ready(function()
 				}
 			}
 		};
-		
+
 		var resetY = function()
 		{
 			yPos = getYPos();
@@ -395,31 +412,31 @@ $(document).ready(function()
 			bottom.css("top", (yPos + gap / 2) + "px");
 		};
 		
+		var getYPos = function()
+		{
+			var top = separation;
+			var bottom = separation;
+			var range = gameHeight - top - bottom;
+			return Math.random() * range + top;
+		};
+		
 		var getX = function()
 		{
 			return parseFloat(top.css("left"));
 		};
-		
+
 		var setX = function(x)
 		{
 			top.css("left", x + "px");
 			bottom.css("left", x + "px");
 		};
-		
+
 		var getWidth = function()
 		{
 			return top.width();
 		};
-		
+
 		return defer.promise();
-	};
-	
-	var getYPos = function()
-	{
-		var top = 100;
-		var bottom = 100;
-		var range = gameHeight - top - bottom;
-		return Math.random() * range + top;
 	};
 	
 	var backgroundPos = 0;
@@ -431,17 +448,20 @@ $(document).ready(function()
 		{
 			pipes[i].move();
 		}
-		if (gameMode == "fps") {
-		    var value = crosshair.css("left");
-		    //value = value.substring(0, value.length - 2);
-		    value = parseInt(value)-2;
-		    //console.log(value);
-		    crosshair.css("left", value + "px");
+		if (gameMode == "fps")
+		{
+			var value = crosshair.css("left");
+			value = parseInt(value) - 2;
+			crosshair.css("left", value + "px");
 		}
-		    if (gameMode == "hard")
-		    bird.velocity += 0.27;
-        else
-	        bird.velocity += 0.25;
+		if (gameMode == "hard")
+		{
+			bird.velocity += 0.27;
+		}
+		else
+		{
+			bird.velocity += 0.25;
+		}
 		bird.yPos += bird.velocity;
 		bird.move();
 		var deg = Math.atan(bird.velocity / 8.0) * 180 / Math.PI;
@@ -455,68 +475,71 @@ $(document).ready(function()
 				break;
 			}
 		}
-		
+
 		if (playingGame)
 		{
 			window.requestAnimationFrame(render);
 		}
 	};
-	
-	var gameModeClassic = function() {
-	    gameMode = "classic";
-	    setDefaultVariables();
-	    initGame();
-	};
-	var setDefaultVariables = function () {
 
+	var gameModeClassic = function()
+	{
+		gameMode = "classic";
+		setDefaultVariables();
+		initGame();
 	};
 
-   
-	var gameModeUpsideDown = function () {
-	    setDefaultVariables();
-	    gameMode = "upsideDown";
-	    $(".game-container").addClass("upside-down");
-	    initGame();
+	var setDefaultVariables = function()
+	{
 	};
 
-	var gameModeHard = function () {
-	    setDefaultVariables();
-	    gameMode = "hard";
-	    initGame();
-
+	var gameModeUpsideDown = function()
+	{
+		setDefaultVariables();
+		gameMode = "upsideDown";
+		$(".game-container").addClass("upside-down");
+		initGame();
 	};
 
-	var gameModeFps = function () {
-	    gameMode = "fps";
-	    var tempCrosshair = document.createElement("img");
-	    tempCrosshair.setAttribute("id", "crosshair");
-	    tempCrosshair.setAttribute("src", "crosshair.png");
-	    $(".game-game").append(tempCrosshair);
-	    $("#crosshair").css("top", 0);
-	    $("#crosshair").css("left", -100);
-	    $(".game-game").on("click", aimCrosshair);
-	    crosshair = $("#crosshair");
-	    initGame();
+	var gameModeHard = function()
+	{
+		setDefaultVariables();
+		gameMode = "hard";
+		initGame();
 	};
 
-	var endGameModefps = function () {
-	    setDefaultVariables();
-	    crosshair.remove();
-	    gameMode = "classic";
-	    $(".game-game").off("click", aimCrosshair);
+	var gameModeFps = function()
+	{
+		gameMode = "fps";
+		var tempCrosshair = document.createElement("img");
+		tempCrosshair.setAttribute("id", "crosshair");
+		tempCrosshair.setAttribute("src", "crosshair.png");
+		$(".game-game").append(tempCrosshair);
+		$("#crosshair").css("top", 0);
+		$("#crosshair").css("left", -100);
+		$(".game-game").on("click", aimCrosshair);
+		crosshair = $("#crosshair");
+		initGame();
 	};
 
-	var aimCrosshair = function (event) {
-	    
-	    var offset = $(".game-game").offset();
-	    var xPos = event.clientX - offset.left -72;
-	    var yPos = event.clientY - offset.top -72;
-	    crosshair.css("top", yPos);
-	    crosshair.css("left", xPos);
-	    pipes[0].shootPipe(xPos + 72, yPos + 72);
-	    pipes[1].shootPipe(xPos + 72, yPos + 72);
-
+	var endGameModefps = function()
+	{
+		setDefaultVariables();
+		crosshair.remove();
+		gameMode = "classic";
+		$(".game-game").off("click", aimCrosshair);
 	};
-	
+
+	var aimCrosshair = function(event)
+	{
+		var offset = $(".game-game").offset();
+		var xPos = event.clientX - offset.left - 72;
+		var yPos = event.clientY - offset.top - 72;
+		crosshair.css("top", yPos);
+		crosshair.css("left", xPos);
+		pipes[0].shootPipe(xPos + 72, yPos + 72);
+		pipes[1].shootPipe(xPos + 72, yPos + 72);
+	};
+
 	addEventListeners();
 });
