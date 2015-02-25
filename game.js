@@ -355,7 +355,7 @@ $(document).ready(function()
 			if (x >= x1 && x <= x2) {
 			    if(y <= y1 && top.is(":visible"))
                     return true;
-			    else if(y >= y2 && bottome.is(":visible"))
+			    else if(y >= y2 && bottom.is(":visible"))
 			        return true;
 			}
 			return false;
@@ -473,7 +473,6 @@ $(document).ready(function()
 	var gameModeHard = function () {
 	    setDefaultVariables();
 	    gameMode = "hard";
-	    $(".game-game").on("click", aimCrosshair);
 	    initGame();
 
 	};
@@ -485,16 +484,25 @@ $(document).ready(function()
 	    $(".game-game").append(crosshair);
 	    $("#crosshair").css("top", gameHeight / 2);
 	    $("#crosshair").css("left", gameWidth / 2);
+	    $(".game-game").on("click", aimCrosshair);
 	    initGame();
 	};
 	var endGameModefps = function () {
 	    setDefaultVariables();
 	    $("#crosshair").remove();
 	    gameMode = "classic";
+	    $(".game-game").off("click", aimCrosshair);
 	};
 
 	var aimCrosshair = function (event) {
-	    console.log(event.clientX);
+
+	    console.log(event.clientX + " " + event.clientY);
+	    var offset = $(".game-game").offset();
+	    var xPos = event.clientX - offset.left;
+	    var yPos=event.clientY - offset.top;
+	    $("#crosshair").css("top", yPos);
+	    $("#crosshair").css("left", xPos);
+
 	}
 	
 	addEventListeners();
