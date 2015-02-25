@@ -9,6 +9,7 @@ $(document).ready(function()
 	var flapTime = 50;
 	var pipes = [];
 	var birdImg = document.getElementById("bird");
+	var gameMode;
 	var bird = {
 		init: function()
 		{
@@ -70,7 +71,10 @@ $(document).ready(function()
 	
 	var endGame = function()
 	{
-		playingGame = false;
+	    playingGame = false;
+	    if (gameMode == "upsideDown") {
+	        $(".game-container").removeClass("upside-down");
+	    }
 		alert("You died!");
 		$(".game-game").hide();
 		$(".game-submit").show();
@@ -83,7 +87,7 @@ $(document).ready(function()
 		{
 			$(".game-menu").fadeOut(function()
 			{
-				initGame();
+				gameModeClassic();
 			});
 		});
 		
@@ -141,6 +145,34 @@ $(document).ready(function()
 			{
 				$(".game-modes").fadeIn();
 			});
+		});
+		
+		$("#game-modes-mainMenu").on("click", function()
+		{
+			$(".game-modes").fadeOut(function()
+			{
+				$(".game-menu").fadeIn();
+			});
+		});
+		
+		$("#game-modes-upsideDown").on("click", function () {
+		    
+
+		    $(".game-modes").fadeOut(function () {
+
+		        gameModeUpsideDown();
+
+		    });
+		});
+
+		$("#game-modes-hard").on("click", function () {
+
+
+		    $(".game-modes").fadeOut(function () {
+
+		        gameModeHard();
+
+		    });
 		});
 		
 		$("#view-options").on("click", function()
@@ -231,10 +263,16 @@ $(document).ready(function()
 		
 		$("body").on("keydown", function(e)
 		{
-			if (e.keyCode == 32)
-			{
-				bird.velocity = -8;
-												
+		    if (e.keyCode == 32)
+		    {
+		        if (gameMode == "hard")
+		        {
+		                bird.velocity = -7.5;
+		        }
+		        else
+		        {
+		            bird.velocity = -8;
+		        }						
 				var taps = parseInt($("#game-stats-taps").text());
 				$("#game-stats-taps").text(taps + 1);
 				
@@ -295,8 +333,11 @@ $(document).ready(function()
 			}
 			else
 			{
-				var oldX = getX();
-				setX(oldX - 2);
+			    var oldX = getX();
+			    if (gameMode == "hard")
+			        setX(oldX - 6);
+			    else
+				    setX(oldX - 2);
 				
 				var cutoff = gameWidth / 2 - getWidth();
 				if (oldX >= cutoff && getX() < cutoff)
@@ -350,8 +391,10 @@ $(document).ready(function()
 		{
 			pipes[i].move();
 		}
-		
-		bird.velocity += 0.28;
+		if (gameMode == "hard")
+		    bird.velocity += 0.27;
+        else
+	        bird.velocity += 0.25;
 		bird.yPos += bird.velocity;
 		bird.move();
 		var deg = Math.atan(bird.velocity / 8.0) * 180 / Math.PI;
@@ -370,6 +413,30 @@ $(document).ready(function()
 		{
 			window.requestAnimationFrame(render);
 		}
+	};
+	
+	var gameModeClassic = function() {
+	    gameMode = "classic";
+	    setDefaultVariables();
+	    initGame();
+	};
+	var setDefaultVariables = function () {
+
+	};
+
+   
+	var gameModeUpsideDown = function () {
+	    setDefaultVariables();
+	    gameMode = "upsideDown";
+	    $(".game-container").addClass("upside-down");
+	    initGame();
+	};
+	var gameModeHard = function () {
+	    setDefaultVariables();
+	    gameMode = "hard";
+
+	    initGame();
+
 	};
 	
 	addEventListeners();
