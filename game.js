@@ -212,7 +212,7 @@ $(document).ready(function()
 		
 		$("#game-options-metroidBird").on("click", function()
 		{
-			birdImg.src = "metroid_1.png";
+			bird.element.src = "metroid_1.png";
 		});
 		
 		$("#game-options-defaultBackground").on("click", function()
