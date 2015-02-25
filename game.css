@@ -42,6 +42,15 @@ body
 	width: 800px;
 }
 
+.upside-down {
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+
 .game-container > div
 {
 	height: 600px;
@@ -78,6 +87,11 @@ body
 }
 
 .game-options
+{
+	display: none;
+	overflow: auto;
+}
+.game-modes 
 {
 	display: none;
 	overflow: auto;
@@ -150,3 +164,4 @@ body
 {
 	background: linear-gradient(to right, #FF9999, #FF6666);
 }
+

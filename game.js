@@ -135,6 +135,13 @@ $(document).ready(function()
 				});
 			});
 		});
+		$("#other-game-modes").on("click", function()
+		{
+			$(".game-menu").fadeOut(function()
+			{
+				$(".game-modes").fadeIn();
+			});
+		});
 		
 		$("#view-options").on("click", function()
 		{
@@ -219,6 +226,7 @@ $(document).ready(function()
 			{
 				alert("Please enter a valid name\nthat is 3 to 32 characters long.");
 			}
+
 		});
 		
 		$("body").on("keydown", function(e)
@@ -343,7 +351,7 @@ $(document).ready(function()
 			pipes[i].move();
 		}
 		
-		bird.velocity += 0.25;
+		bird.velocity += 0.28;
 		bird.yPos += bird.velocity;
 		bird.move();
 		var deg = Math.atan(bird.velocity / 8.0) * 180 / Math.PI;
