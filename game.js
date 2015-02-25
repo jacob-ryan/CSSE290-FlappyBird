@@ -205,17 +205,45 @@ $(document).ready(function()
 		{
 			bird.element.src = "minibird_1.png";
 		});
-
+		
+		$("#game-options-metroidBird").on("click", function()
+		{
+			bird.element.src = "metroid_1.png";
+		});
+		
 		$("#game-options-defaultBackground").on("click", function()
 		{
 			$(".game-container").css("background", "url(background-simple.png)");
 		});
-
+		
+		$("#game-options-ruinedBackground").on("click", function()
+		{
+			$(".game-container").css("background", "url(background-ruined.png)");
+		});
+		
 		$("#game-options-metroidBackground").on("click", function()
 		{
 			$(".game-container").css("background", "url(background-metroid.png)");
 		});
-
+		
+		$("#game-options-defaultPipe").on("click", function()
+		{
+			pipeTopUrl = "pipe-top.png";
+			pipeBottomUrl = "pipe-bottom.png";
+		});
+		
+		$("#game-options-dirtPipe").on("click", function()
+		{
+			pipeTopUrl = "pipe_dirt-top.png";
+			pipeBottomUrl = "pipe_dirt-bottom.png";
+		});
+		
+		$("#game-options-clearPipe").on("click", function()
+		{
+			pipeTopUrl = "pipe_clear-top.png";
+			pipeBottomUrl = "pipe_clear-bottom.png";
+		});
+		
 		$("#game-highscores-mainMenu").on("click", function()
 		{
 			$(".game-highscores").fadeOut(function()
