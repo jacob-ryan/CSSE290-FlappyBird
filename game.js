@@ -75,6 +75,9 @@ $(document).ready(function()
 	    if (gameMode == "upsideDown") {
 	        $(".game-container").removeClass("upside-down");
 	    }
+	    if (gameMode == "fps") {
+	        endGameModefps();
+	    }
 		alert("You died!");
 		$(".game-game").hide();
 		$(".game-submit").show();
@@ -171,6 +174,15 @@ $(document).ready(function()
 		    $(".game-modes").fadeOut(function () {
 
 		        gameModeHard();
+
+		    });
+		});
+		$("#game-modes-fps").on("click", function () {
+
+
+		    $(".game-modes").fadeOut(function () {
+
+		        gameModeFps();
 
 		    });
 		});
@@ -310,24 +322,51 @@ $(document).ready(function()
 					isCollision: isCollision,
 					move: move,
 					setX: setX,
-					getWidth: getWidth
+					getWidth: getWidth,
+                    shootPipe: shootPipe
 				});
 			}
 		});
-		
+
+		var shootPipe = function (x, y) {
+		    var x1 = getX();
+		    var x2 = x1 + getWidth();
+		    var y1 = yPos - gap / 2;
+		    var y2 = yPos + gap / 2;
+		    if (x >= x1 && x <= x2) {
+		        if (y <= y1 && top.is(":visible")) {
+		            top.hide();
+		            return true;
+		        }
+		        else if (y >= y2 && bottome.is(":visible")) {
+		            bottom.hide();
+		            return true;
+		        }
+		    }
+		    return false;
+		};
+
 		var isCollision = function(x, y)
 		{
 			var x1 = getX();
 			var x2 = x1 + getWidth();
 			var y1 = yPos - gap / 2;
 			var y2 = yPos + gap / 2;
-			return x >= x1 && x <= x2 && (y <= y1 || y >= y2);
+			if (x >= x1 && x <= x2) {
+			    if(y <= y1 && top.is(":visible"))
+                    return true;
+			    else if(y >= y2 && bottome.is(":visible"))
+			        return true;
+			}
+			return false;
 		};
 		
 		var move = function()
 		{
 			if (getX() < -top.width())
 			{
+			    top.show();
+			    bottom.show();
 				setX(gameWidth);
 				resetY();
 			}
@@ -434,10 +473,29 @@ $(document).ready(function()
 	var gameModeHard = function () {
 	    setDefaultVariables();
 	    gameMode = "hard";
-
+	    $(".game-game").on("click", aimCrosshair);
 	    initGame();
 
 	};
+	var gameModeFps = function () {
+	    gameMode = "fps";
+	    var crosshair = document.createElement("img");
+	    crosshair.setAttribute("id", "crosshair");
+	    crosshair.setAttribute("src", "crosshair.png");
+	    $(".game-game").append(crosshair);
+	    $("#crosshair").css("top", gameHeight / 2);
+	    $("#crosshair").css("left", gameWidth / 2);
+	    initGame();
+	};
+	var endGameModefps = function () {
+	    setDefaultVariables();
+	    $("#crosshair").remove();
+	    gameMode = "classic";
+	};
+
+	var aimCrosshair = function (event) {
+	    console.log(event.clientX);
+	}
 	
 	addEventListeners();
 });
