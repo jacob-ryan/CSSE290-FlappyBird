@@ -102,18 +102,22 @@ $(document).ready(function()
 				$.get("highscores.php").done(function(data)
 				{
 					var scores = data.trim().split("\n");
-					for (var i = 0; i < scores.length; i += 1)
-					{
-						var score = scores[i].trim().split(";");
-						var html = "<tr>";
-						html += "<td>" + (i + 1) + "</td>";
-						html += "<td>" + score[0] + "</td>";
-						html += "<td>" + score[1] + "</td>";
-						html += "<td>" + score[2] + "</td>";
-						html += "<td>" + score[3] + "</td>";
-						html += "<td>" + score[4] + "</td>";
-						html += "</tr>";
-						$(".highscores-table").append(html);
+					if(scores != "") {
+						for (var i = 0; i < scores.length; i += 1)
+						{
+							var score = scores[i].trim().split(";");
+							var html = "<tr>";
+							html += "<td>" + (i + 1) + "</td>";
+							html += "<td>" + score[0] + "</td>";
+							html += "<td>" + score[1] + "</td>";
+							html += "<td>" + score[2] + "</td>";
+							html += "<td>" + score[3] + "</td>";
+							html += "<td>" + score[4] + "</td>";
+							html += "</tr>";
+							$(".highscores-table").append(html);
+						}
+					} else {
+						
 					}
 				});
 				$(".game-highscores").fadeIn();
