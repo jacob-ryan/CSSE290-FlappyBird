@@ -182,13 +182,9 @@ $(document).ready(function()
 
 		$("#game-modes-fps").on("click", function()
 		{
-
-
 			$(".game-modes").fadeOut(function()
 			{
-
 				gameModeFps();
-
 			});
 		});
 
@@ -282,6 +278,8 @@ $(document).ready(function()
 		{
 			if (e.keyCode == 32)
 			{
+				e.preventDefault();
+				
 				if (gameMode == "hard")
 				{
 					bird.velocity = -7.5;
@@ -307,7 +305,7 @@ $(document).ready(function()
 					}, flapTime);
 				}, flapTime);
 				
-				(new Audio("flap.wav")).play();
+				(new Audio("flap.mp3")).play();
 			}
 		});
 	};
