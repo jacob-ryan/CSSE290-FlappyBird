@@ -10,6 +10,7 @@ $(document).ready(function()
 	var pipes = [];
 	var birdImg = document.getElementById("bird");
 	var gameMode;
+	var crosshair;
 	var bird = {
 		init: function()
 		{
@@ -338,7 +339,7 @@ $(document).ready(function()
 		            top.hide();
 		            return true;
 		        }
-		        else if (y >= y2 && bottome.is(":visible")) {
+		        else if (y >= y2 && bottom.is(":visible")) {
 		            bottom.hide();
 		            return true;
 		        }
@@ -430,7 +431,14 @@ $(document).ready(function()
 		{
 			pipes[i].move();
 		}
-		if (gameMode == "hard")
+		if (gameMode == "fps") {
+		    var value = crosshair.css("left");
+		    //value = value.substring(0, value.length - 2);
+		    value = parseInt(value)-2;
+		    //console.log(value);
+		    crosshair.css("left", value + "px");
+		}
+		    if (gameMode == "hard")
 		    bird.velocity += 0.27;
         else
 	        bird.velocity += 0.25;
@@ -470,40 +478,45 @@ $(document).ready(function()
 	    $(".game-container").addClass("upside-down");
 	    initGame();
 	};
+
 	var gameModeHard = function () {
 	    setDefaultVariables();
 	    gameMode = "hard";
 	    initGame();
 
 	};
+
 	var gameModeFps = function () {
 	    gameMode = "fps";
-	    var crosshair = document.createElement("img");
-	    crosshair.setAttribute("id", "crosshair");
-	    crosshair.setAttribute("src", "crosshair.png");
-	    $(".game-game").append(crosshair);
-	    $("#crosshair").css("top", gameHeight / 2);
-	    $("#crosshair").css("left", gameWidth / 2);
+	    var tempCrosshair = document.createElement("img");
+	    tempCrosshair.setAttribute("id", "crosshair");
+	    tempCrosshair.setAttribute("src", "crosshair.png");
+	    $(".game-game").append(tempCrosshair);
+	    $("#crosshair").css("top", 0);
+	    $("#crosshair").css("left", -100);
 	    $(".game-game").on("click", aimCrosshair);
+	    crosshair = $("#crosshair");
 	    initGame();
 	};
+
 	var endGameModefps = function () {
 	    setDefaultVariables();
-	    $("#crosshair").remove();
+	    crosshair.remove();
 	    gameMode = "classic";
 	    $(".game-game").off("click", aimCrosshair);
 	};
 
 	var aimCrosshair = function (event) {
-
-	    console.log(event.clientX + " " + event.clientY);
+	    
 	    var offset = $(".game-game").offset();
-	    var xPos = event.clientX - offset.left;
-	    var yPos=event.clientY - offset.top;
-	    $("#crosshair").css("top", yPos);
-	    $("#crosshair").css("left", xPos);
+	    var xPos = event.clientX - offset.left -72;
+	    var yPos = event.clientY - offset.top -72;
+	    crosshair.css("top", yPos);
+	    crosshair.css("left", xPos);
+	    pipes[0].shootPipe(xPos + 72, yPos + 72);
+	    pipes[1].shootPipe(xPos + 72, yPos + 72);
 
-	}
+	};
 	
 	addEventListeners();
 });
