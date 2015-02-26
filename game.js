@@ -89,7 +89,6 @@ $(document).ready(function()
 		} else {
 		    $(".game-menu").show();
 		}
-		gameMode == "classic";
 	};
 
 	var addEventListeners = function()
