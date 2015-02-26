@@ -7,13 +7,15 @@ $(document).ready(function()
 	var pipeBottomUrl = "pipe-bottom.png";
 	var separation = 180;
 	var flapTime = 100;
-	var pipes = [];
+	var pipes;
 	var gameMode;
 	var crosshair;
+
 	var bird = {
 		element: $("#bird")[0],
 		init: function()
 		{
+			$("#bird").css("transform", "");
 			bird.xPos = gameWidth / 2 - $("#bird").width() / 2;
 			bird.yPos = gameHeight / 2;
 			bird.velocity = 0;
@@ -38,6 +40,24 @@ $(document).ready(function()
 			{
 				endGame();
 			}
+		},
+		flapWings: function()
+		{
+			(new Audio("flap.mp3")).play();
+
+			bird.element.src = bird.element.src.replace("_1", "_2");
+			setTimeout(function()
+			{
+				bird.element.src = bird.element.src.replace("_2", "_3");
+				setTimeout(function()
+				{
+					bird.element.src = bird.element.src.replace("_3", "_2");
+					setTimeout(function()
+					{
+						bird.element.src = bird.element.src.replace("_2", "_1");
+					}, flapTime);
+				}, flapTime);
+			}, flapTime);
 		}
 	};
 
@@ -191,7 +211,7 @@ $(document).ready(function()
 				gameModeFps();
 			});
 		});
-		
+
 		$("#game-modes-alt").on("click", function()
 		{
 			$(".game-modes").fadeOut(function()
@@ -217,45 +237,45 @@ $(document).ready(function()
 		{
 			bird.element.src = "minibird_1.png";
 		});
-		
+
 		$("#game-options-metroidBird").on("click", function()
 		{
 			bird.element.src = "metroid_1.png";
 		});
-		
+
 		$("#game-options-defaultBackground").on("click", function()
 		{
 			$(".game-container").css("background", "url(background-simple.png)");
 		});
-		
+
 		$("#game-options-ruinedBackground").on("click", function()
 		{
 			$(".game-container").css("background", "url(background-ruined.png)");
 		});
-		
+
 		$("#game-options-metroidBackground").on("click", function()
 		{
 			$(".game-container").css("background", "url(background-metroid.png)");
 		});
-		
+
 		$("#game-options-defaultPipe").on("click", function()
 		{
 			pipeTopUrl = "pipe-top.png";
 			pipeBottomUrl = "pipe-bottom.png";
 		});
-		
+
 		$("#game-options-dirtPipe").on("click", function()
 		{
 			pipeTopUrl = "pipe_dirt-top.png";
 			pipeBottomUrl = "pipe_dirt-bottom.png";
 		});
-		
+
 		$("#game-options-clearPipe").on("click", function()
 		{
 			pipeTopUrl = "pipe_clear-top.png";
 			pipeBottomUrl = "pipe_clear-bottom.png";
 		});
-		
+
 		$("#game-highscores-mainMenu").on("click", function()
 		{
 			$(".game-highscores").fadeOut(function()
@@ -319,50 +339,40 @@ $(document).ready(function()
 			if (e.keyCode == 32)
 			{
 				e.preventDefault();
-				
+
 				if (gameMode == "hard")
 				{
 					bird.velocity = -10.5;
 				}
 				else if (gameMode == "alt")
 				{
-					
-					for (var rep = 0; rep < 100; rep++)
+					var offset = 0;
+					var doMove = function()
+					{
+						for (var i = 0; i < pipes.length; i += 1)
 						{
-							setTimeout(function()
-							{
-								for (var i = 0; i < pipes.length; i += 1)
-									{
-										pipes[i].move();
-									}
-								backgroundPos -= 1;
-								$(".game-container").css("background-position", backgroundPos + "px 0px");
-							}, 1);
+							pipes[i].move();
 						}
-				}				
-				
+						backgroundPos -= 1;
+						$(".game-container").css("background-position", backgroundPos + "px 0px");
+						
+						offset += 1;
+						if (offset <= 100)
+						{
+							setTimeout(doMove, 1);
+						}
+					};
+					
+					doMove();
+				}
 				else
 				{
 					bird.velocity = -7.8;
 				}
 				var taps = parseInt($("#game-stats-taps").text());
 				$("#game-stats-taps").text(taps + 1);
-				
-				bird.element.src = bird.element.src.replace("_1", "_2");
-				setTimeout(function()
-				{
-					bird.element.src = bird.element.src.replace("_2", "_3");
-					setTimeout(function()
-					{
-						bird.element.src = bird.element.src.replace("_3", "_2");
-						setTimeout(function()
-						{
-							bird.element.src = bird.element.src.replace("_2", "_1");
-						}, flapTime);
-					}, flapTime);
-				}, flapTime);
-				
-				(new Audio("flap.mp3")).play();
+
+				bird.flapWings();
 			}
 		});
 	};
@@ -427,9 +437,13 @@ $(document).ready(function()
 			if (x >= x1 && x <= x2)
 			{
 				if (y <= y1 && top.is(":visible"))
+				{
 					return true;
+				}
 				else if (y >= y2 && bottom.is(":visible"))
+				{
 					return true;
+				}
 			}
 			return false;
 		};
@@ -466,7 +480,7 @@ $(document).ready(function()
 			top.css("top", (yPos - top.height() - gap / 2) + "px");
 			bottom.css("top", (yPos + gap / 2) + "px");
 		};
-		
+
 		var getYPos = function()
 		{
 			var top = separation;
@@ -474,7 +488,7 @@ $(document).ready(function()
 			var range = gameHeight - top - bottom;
 			return Math.random() * range + top;
 		};
-		
+
 		var getX = function()
 		{
 			return parseFloat(top.css("left"));
@@ -493,9 +507,8 @@ $(document).ready(function()
 
 		return defer.promise();
 	};
-	
+
 	var backgroundPos = 0;
-	var toggle = 0;
 	var render = function()
 	{
 		if (gameMode != "alt")
@@ -525,22 +538,16 @@ $(document).ready(function()
 			var deg = Math.atan(bird.velocity / 8.0) * 180 / Math.PI;
 			$("#bird").css("transform", "rotate(" + deg + "deg)");
 		}
-		else 
+		else
 		{
-			var deg = 0;
-			$("#bird").css("transform", "rotate(" + deg + "deg)");
-			if (toggle == 0)
+			if (bird.yPos <= 50 || bird.yPos >= gameHeight - 50 - $(bird.element).height())
 			{
-				bird.yPos += 5;
-				if (bird.yPos > gameHeight - 50) {toggle = 1;}
+				bird.velocity = -bird.velocity;
 			}
-			else 
-			{
-				bird.yPos -= 5;
-				if (bird.yPos < 20) {toggle = 0;}
-			}
+			bird.yPos += bird.velocity;
 			bird.move();
 		}
+
 		for (var i = 0; i < pipes.length; i += 1)
 		{
 			var pipe = pipes[i];
@@ -560,17 +567,11 @@ $(document).ready(function()
 	var gameModeClassic = function()
 	{
 		gameMode = "classic";
-		setDefaultVariables();
 		initGame();
-	};
-
-	var setDefaultVariables = function()
-	{
 	};
 
 	var gameModeUpsideDown = function()
 	{
-		setDefaultVariables();
 		gameMode = "upsideDown";
 		$(".game-container").addClass("upside-down");
 		initGame();
@@ -578,16 +579,15 @@ $(document).ready(function()
 
 	var gameModeHard = function()
 	{
-		setDefaultVariables();
 		gameMode = "hard";
 		initGame();
 	};
-	
+
 	var gameModeAlt = function()
 	{
-		setDefaultVariables();
 		gameMode = "alt";
 		initGame();
+		bird.velocity = -4;
 	}
 
 	var gameModeFps = function()
@@ -606,7 +606,6 @@ $(document).ready(function()
 
 	var endGameModefps = function()
 	{
-		setDefaultVariables();
 		crosshair.remove();
 		gameMode = "classic";
 		$(".game-game").off("click", aimCrosshair);
