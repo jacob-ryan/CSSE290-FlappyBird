@@ -83,8 +83,13 @@ $(document).ready(function()
 			endGameModefps();
 		}
 		$(".game-game").hide();
-		$(".game-submit").show();
-		$("#game-submit-yes").removeAttr("disabled");
+		if (gameMode == "classic") {
+		    $(".game-submit").show();
+		    $("#game-submit-yes").removeAttr("disabled");
+		} else {
+		    $(".game-menu").show();
+		}
+		gameMode == "classic";
 	};
 
 	var addEventListeners = function()
