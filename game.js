@@ -607,7 +607,6 @@ $(document).ready(function()
 	var endGameModefps = function()
 	{
 		crosshair.remove();
-		gameMode = "classic";
 		$(".game-game").off("click", aimCrosshair);
 	};
 
