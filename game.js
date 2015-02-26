@@ -187,6 +187,14 @@ $(document).ready(function()
 				gameModeFps();
 			});
 		});
+		
+		$("#game-modes-alt").on("click", function()
+		{
+			$(".game-modes").fadeOut(function()
+			{
+				gameModeAlt();
+			});
+		});
 
 		$("#view-options").on("click", function()
 		{
@@ -312,6 +320,23 @@ $(document).ready(function()
 				{
 					bird.velocity = -7.5;
 				}
+				else if (gameMode == "alt")
+				{
+					
+					for (var rep = 0; rep < 100; rep++)
+						{
+							setTimeout(function()
+							{
+								for (var i = 0; i < pipes.length; i += 1)
+									{
+										pipes[i].move();
+									}
+								backgroundPos -= 1;
+								$(".game-container").css("background-position", backgroundPos + "px 0px");
+							}, 1);
+						}
+				}				
+				
 				else
 				{
 					bird.velocity = -8;
@@ -466,32 +491,50 @@ $(document).ready(function()
 	};
 	
 	var backgroundPos = 0;
+	var toggle = 0;
 	var render = function()
 	{
-		backgroundPos -= 1;
-		$(".game-container").css("background-position", backgroundPos + "px 0px");
-		for (var i = 0; i < pipes.length; i += 1)
+		if (gameMode != "alt")
 		{
-			pipes[i].move();
+			backgroundPos -= 1;
+			$(".game-container").css("background-position", backgroundPos + "px 0px");
+			for (var i = 0; i < pipes.length; i += 1)
+			{
+				pipes[i].move();
+			}
+			if (gameMode == "fps")
+			{
+				var value = crosshair.css("left");
+				value = parseInt(value) - 2;
+				crosshair.css("left", value + "px");
+			}
+			if (gameMode == "hard")
+			{
+				bird.velocity += 0.27;
+			}
+			else
+			{
+				bird.velocity += 0.25;
+			}
+			bird.yPos += bird.velocity;
+			bird.move();
+			var deg = Math.atan(bird.velocity / 8.0) * 180 / Math.PI;
+			$("#bird").css("transform", "rotate(" + deg + "deg)");
 		}
-		if (gameMode == "fps")
+		else 
 		{
-			var value = crosshair.css("left");
-			value = parseInt(value) - 2;
-			crosshair.css("left", value + "px");
+			if (toggle == 0)
+			{
+				bird.yPos += 5;
+				if (bird.yPos > gameHeight - 50) {toggle = 1;}
+			}
+			else 
+			{
+				bird.yPos -= 5;
+				if (bird.yPos < 20) {toggle = 0;}
+			}
+			bird.move();
 		}
-		if (gameMode == "hard")
-		{
-			bird.velocity += 0.27;
-		}
-		else
-		{
-			bird.velocity += 0.25;
-		}
-		bird.yPos += bird.velocity;
-		bird.move();
-		var deg = Math.atan(bird.velocity / 8.0) * 180 / Math.PI;
-		$("#bird").css("transform", "rotate(" + deg + "deg)");
 		for (var i = 0; i < pipes.length; i += 1)
 		{
 			var pipe = pipes[i];
@@ -533,6 +576,13 @@ $(document).ready(function()
 		gameMode = "hard";
 		initGame();
 	};
+	
+	var gameModeAlt = function()
+	{
+		setDefaultVariables();
+		gameMode = "alt";
+		initGame();
+	}
 
 	var gameModeFps = function()
 	{
