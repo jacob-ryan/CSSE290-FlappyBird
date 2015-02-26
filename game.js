@@ -496,7 +496,6 @@ $(document).ready(function()
 	{
 		if (gameMode != "alt")
 		{
-<<<<<<< HEAD
 			backgroundPos -= 1;
 			$(".game-container").css("background-position", backgroundPos + "px 0px");
 			for (var i = 0; i < pipes.length; i += 1)
@@ -511,7 +510,7 @@ $(document).ready(function()
 			}
 			if (gameMode == "hard")
 			{
-				bird.velocity += 0.27;
+				bird.velocity += 0.40;
 			}
 			else
 			{
@@ -521,18 +520,11 @@ $(document).ready(function()
 			bird.move();
 			var deg = Math.atan(bird.velocity / 8.0) * 180 / Math.PI;
 			$("#bird").css("transform", "rotate(" + deg + "deg)");
-=======
-			var value = crosshair.css("left");
-			value = parseInt(value) - 2;
-			crosshair.css("left", value + "px");
-		}
-		if (gameMode == "hard")
-		{
-			bird.velocity += 0.40;
->>>>>>> origin/master
 		}
 		else 
 		{
+			var deg = 0;
+			$("#bird").css("transform", "rotate(" + deg + "deg)");
 			if (toggle == 0)
 			{
 				bird.yPos += 5;
