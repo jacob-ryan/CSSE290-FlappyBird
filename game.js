@@ -310,11 +310,11 @@ $(document).ready(function()
 				
 				if (gameMode == "hard")
 				{
-					bird.velocity = -7.5;
+					bird.velocity = -10.5;
 				}
 				else
 				{
-					bird.velocity = -8;
+					bird.velocity = -7.8;
 				}
 				var taps = parseInt($("#game-stats-taps").text());
 				$("#game-stats-taps").text(taps + 1);
@@ -482,7 +482,7 @@ $(document).ready(function()
 		}
 		if (gameMode == "hard")
 		{
-			bird.velocity += 0.27;
+			bird.velocity += 0.40;
 		}
 		else
 		{
